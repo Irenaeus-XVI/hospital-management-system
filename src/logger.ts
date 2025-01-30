@@ -21,7 +21,7 @@ const prettyConfig: PrettyOptions = {
 };
 
 const options: LoggerOptions = {
-  level: configuration()()['logLevel'],
+  level: configuration()['logLevel'],
   base: {
     serviceContext: {
       service: configuration()['applicationName'],
