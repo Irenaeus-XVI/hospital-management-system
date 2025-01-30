@@ -12,5 +12,5 @@ const configurations = {
 
 const config = configurations[env];
 
-export default () => config();
+export default () => config;
 

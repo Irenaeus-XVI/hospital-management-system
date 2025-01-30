@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [configuration],
+      load: [configuration()],
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
