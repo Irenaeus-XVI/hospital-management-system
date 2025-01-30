@@ -4,10 +4,17 @@ import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
 import helmet from 'helmet';
 import * as compression from 'compression';
+import { ConfigService } from '@nestjs/config';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+  const config = app.get<ConfigService>(ConfigService);
+  const PORT = config.get('port');
+
+
+  await app.listen(PORT ?? 3000);
+
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.use(json({ limit: '5mb' }));
