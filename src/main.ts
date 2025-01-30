@@ -5,6 +5,9 @@ import { json, urlencoded } from 'express';
 import helmet from 'helmet';
 import * as compression from 'compression';
 import { ConfigService } from '@nestjs/config';
+import { SwaggerModule } from '@nestjs/swagger';
+import { swaggerUi } from './config/docs/swagger.config';
+import { RestLoggingInterceptor } from './blocks/interceptors/rest-logging';
 
 
 async function bootstrap() {
@@ -13,9 +16,11 @@ async function bootstrap() {
   const PORT = config.get('port');
 
 
-  await app.listen(PORT ?? 3000);
+  const document = SwaggerModule.createDocument(app, swaggerUi);
+  SwaggerModule.setup('api-docs', app, document);
 
 
+  app.useGlobalInterceptors(new RestLoggingInterceptor());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.use(json({ limit: '5mb' }));
   app.use(urlencoded({ extended: true }));
@@ -23,6 +28,8 @@ async function bootstrap() {
   app.use(compression());
 
   app.enableCors();
+
+  await app.listen(PORT ?? 3000);
 
 }
 bootstrap();
